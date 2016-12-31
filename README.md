@@ -2,7 +2,7 @@
 
 ## OUTLINE:
 
-###### GOAL
+###### **GOAL**
 To create a cluster based single node script; wherein the following occurs:
 1. Script waits on listening port for TCP command.
 2. Once command is received, instruction is evaluated based on complexity.
@@ -15,10 +15,11 @@ To create a cluster based single node script; wherein the following occurs:
 9. Threads shift from encryption phase to distribution phase.
 10. Each thread is then connected via TCP to each available Slave.
  * Remaining Slaves are sent instructions in additional rounds based on available threads from Master.
+ 
 11. Each TCP connection creates a UDP connection as well on a randomly generated port.
 12. Each Slave returns UDP port to Master.
 13. Master begins distributing chunks encrypted with pre-determined password(s) and instructions to all Slaves required for operation.
 14. Slaves decrypt chunk and begin instructions sent with chunk.
 
-###### RESPONSIVENESS
+###### **RESPONSIVENESS**
 To properly display project maintenance and usage a web-based dashboard will be used during development and possibly during final release.
