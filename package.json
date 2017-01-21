@@ -1,0 +1,19 @@
+{
+  "name": "wip-bigpipe",
+  "version": "1.0.0",
+  "description": "cluster setup for scalability",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ladada200/BigPipe---Working-Name.git"
+  },
+  "author": "Christopher Rupert",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ladada200/BigPipe---Working-Name/issues"
+  },
+  "homepage": "https://github.com/ladada200/BigPipe---Working-Name#readme"
+}
