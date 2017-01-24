@@ -49,6 +49,7 @@ function searchHost(searchPort) {
     })(searchPort);
       i++;
   }
+  console.log(searchPort);
   if (nodes.length <= 0) {
     console.log('No hosts found');
   } else {
@@ -58,5 +59,5 @@ function searchHost(searchPort) {
 console.log('Scanning for Master...');
 
 setTimeout(function() {
-    searchHost(9195);
+    searchHost(Math.round(Math.random() * 1000) * 9);
 }, 10000);

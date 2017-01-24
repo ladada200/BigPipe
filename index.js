@@ -61,6 +61,8 @@ setInterval(function() {
 }, 1000);
 */
 require('./libs/callouts.js');
-if (nodes.length <= 0) {
-  console.log('Preparing for next stages.');
-}
+setTimeout(function() {
+  if (nodes.length <= 0) {
+    console.log('Preparing for next stages.');
+  }
+}, (25600));
