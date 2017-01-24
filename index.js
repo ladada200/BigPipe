@@ -8,7 +8,8 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var os = require('os');
-require('./clusterfunctions.js');
+
+require('./libs/clusterfunctions.js');
 
 // preDefined Variables.
 
@@ -59,3 +60,7 @@ setInterval(function() {
   console.log('memory load: ' + os.totalmem());
 }, 1000);
 */
+require('./libs/callouts.js');
+if (nodes.length <= 0) {
+  console.log('Preparing for next stages.');
+}
