@@ -15,13 +15,12 @@ sock = new net.Socket();
 sock.setMaxListeners(0);
 // Initiate callouts;
 if (os.platform == 'linux') {
-  var ipAddress = iface['eth0'][0]['address'];
+  var host = iface['eth0'][0]['address'];
 } else if (os.platform == 'win32') {
-  var ipAddress = iface['Ethernet'][1]['address'];
+  var host = iface['Ethernet'][1]['address'];
 }
 // Variables
 var iface = os.networkInterfaces();
-var host = ipAddress;
 var hport = Math.round((Math.random() * 1000) + 1);
 // hport will be the host listening port for challenges only.
 setPort = 9095;
