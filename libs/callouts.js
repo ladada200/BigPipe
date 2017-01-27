@@ -14,7 +14,11 @@ var net = require('net');
 sock = new net.Socket();
 sock.setMaxListeners(0);
 // Initiate callouts;
-
+if (os.platform == 'linux') {
+  var ipAddress = iface['eth0'][0]['address'];
+} else if (os.platform == 'win32') {
+  var ipAddress = iface['Ethernet'][1]['address'];
+}
 // Variables
 var iface = os.networkInterfaces();
 var host = ipAddress;

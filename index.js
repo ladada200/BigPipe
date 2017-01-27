@@ -17,12 +17,10 @@ var numCPUs = os.cpus().length;
 var iface = os.networkInterfaces();
 var hostname = os.hostname();
 if (os.platform == 'linux') {
-  ipAddress = iface['eth0'][0]['address'];
   var ipAddress = iface['eth0'][0]['address'];
   var macAddress = iface['eth0'][0]['mac'];
   var fullID = iface['eth0'][1]['address'];
 } else if (os.platform == 'win32') {
-  ipAddress = iface['Ethernet'][1]['address'];
   var ipAddress = iface['Ethernet'][1]['address'];
   var macAddress = iface['Ethernet'][1]['mac'];
   var fullID = iface['Ethernet'][0]['address'];
