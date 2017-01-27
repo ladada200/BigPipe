@@ -61,8 +61,8 @@ setInterval(function() {
 }, 1000);
 */
 require('./libs/callouts.js');
-setTimeout(function() {
+console.log(new Date().getTime());
   if (nodes.length <= 0) {
     console.log('Preparing for next stages.');
+    require('./libs/master.js');
   }
-}, (25600));

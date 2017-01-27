@@ -11,7 +11,7 @@
 //Prereq
 var os = require('os');
 var net = require('net');
-var sock = new net.Socket();
+sock = new net.Socket();
 sock.setMaxListeners(0);
 // Initiate callouts;
 
@@ -20,7 +20,7 @@ var iface = os.networkInterfaces();
 var host = iface['Ethernet'][1]['address'];
 var hport = Math.round((Math.random() * 1000) + 1);
 // hport will be the host listening port for challenges only.
-var setPort = 9095;
+setPort = 9095;
 // setPort is a user defined port for finding Master or clutser nodes.
 var searchIP = host.split(".");
 var fromHost = searchIP[0] + "." + searchIP[1] + "." + searchIP[2] + ".";
@@ -58,6 +58,22 @@ function searchHost(searchPort) {
 }
 console.log('Scanning for Master...');
 
-setTimeout(function() {
-    searchHost(Math.round(Math.random() * 1000) * 9);
-}, 10000);
+function amIMaster(nodes, searchPort) {
+  nodes.forEach(function() {
+    sock.connect(searchPort, nodes[i], function() {
+    });
+    sock.on('data', function(data) {
+      console.log(data);
+      sock.destroy();
+    });
+    sock.on('error', function(e) {
+      sock.destroy();
+    });
+  });
+}
+    //searchHost(Math.round(Math.random() * 1000) * 9);
+searchHost(setPort);
+
+if (nodes.length >= 1) {
+  amIMaster(nodes, searchPort);
+}
