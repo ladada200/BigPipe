@@ -19,11 +19,13 @@ var hostname = os.hostname();
 if (os.platform == 'linux') {
   var ipAddress = iface['eth0'][0]['address'];
   var macAddress = iface['eth0'][0]['mac'];
+  var fullID = iface['eth0'][1]['address'];
 } else if (os.platform == 'win32') {
   var ipAddress = iface['Ethernet'][1]['address'];
   var macAddress = iface['Ethernet'][1]['mac'];
+  var fullID = iface['Ethernet'][0]['address'];
 }
-var fullID = iface['Ethernet'][0]['address'];
+
 
 // Converts bites to bytes to megs to gigs etc..
 function spcnvrtr(data) {
