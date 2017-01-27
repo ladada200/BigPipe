@@ -1,6 +1,10 @@
 {
   "name": "wip-bigpipe",
   "version": "1.0.0",
+  "dependencies": {
+    "express": "^4.14.0",
+    "socket.io": "^1.7.2"
+  },
   "description": "cluster setup for scalability",
   "main": "index.js",
   "scripts": {
