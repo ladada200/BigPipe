@@ -16,8 +16,13 @@ require('./libs/clusterfunctions.js');
 var numCPUs = os.cpus().length;
 var iface = os.networkInterfaces();
 var hostname = os.hostname();
-var ipAddress = iface['Ethernet'][1]['address'];
-var macAddress = iface['Ethernet'][1]['mac'];
+if (os.platform == 'linux') {
+  var ipAddress = iface['eth0'][0]['address'];
+  var macAddress = iface['eth0'][0]['mac'];
+} else if (os.platform == 'win32') {
+  var ipAddress = iface['Ethernet'][1]['address'];
+  var macAddress = iface['Ethernet'][1]['mac'];
+}
 var fullID = iface['Ethernet'][0]['address'];
 
 // Converts bites to bytes to megs to gigs etc..
