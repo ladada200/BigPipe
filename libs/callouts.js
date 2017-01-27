@@ -17,7 +17,7 @@ sock.setMaxListeners(0);
 
 // Variables
 var iface = os.networkInterfaces();
-var host = iface['Ethernet'][1]['address'];
+var host = ipAddress;
 var hport = Math.round((Math.random() * 1000) + 1);
 // hport will be the host listening port for challenges only.
 setPort = 9095;
