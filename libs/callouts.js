@@ -15,9 +15,9 @@ sock = new net.Socket();
 sock.setMaxListeners(0);
 // Initiate callouts;
 var iface = os.networkInterfaces();
-if (os.platform == 'Linux') {
+if (os.platform() == 'linux') {
   var host = iface['eth0'][0]['address'];
-} else if (os.platform = 'Win32') {
+} else if (os.platform() = 'win32') {
   var host = iface['Ethernet'][1]['address'];
 }
 
