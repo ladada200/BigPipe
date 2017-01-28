@@ -8,7 +8,7 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var os = require('os');
-
+var gpu = require('./libs/gpu.js');
 require('./libs/clusterfunctions.js');
 
 // preDefined Variables.
@@ -16,11 +16,11 @@ require('./libs/clusterfunctions.js');
 var numCPUs = os.cpus().length;
 var iface = os.networkInterfaces();
 var hostname = os.hostname();
-if (os.platform == 'linux') {
+if (os.platform() == 'linux') {
   var ipAddress = iface['eth0'][0]['address'];
   var macAddress = iface['eth0'][0]['mac'];
   var fullID = iface['eth0'][1]['address'];
-} else if (os.platform == 'win32') {
+} else if (os.platform() == 'win32') {
   var ipAddress = iface['Ethernet'][1]['address'];
   var macAddress = iface['Ethernet'][1]['mac'];
   var fullID = iface['Ethernet'][0]['address'];
@@ -57,7 +57,7 @@ console.log("hostname: " + hostname);
 console.log("ip address: " + ipAddress);
 console.log("mac address: " + macAddress);
 console.log("ID: " + fullID);
-console.log("Operating System: " + os.type());
+console.log("Operating System: " + os.platform());
 console.log("CPU Speed: " + spcnvrtr(os.cpus()[0]['speed']) + "hz for " + numCPUs + " cores");
 testArray(os.cpus());
 

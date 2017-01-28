@@ -14,13 +14,15 @@ var net = require('net');
 sock = new net.Socket();
 sock.setMaxListeners(0);
 // Initiate callouts;
-if (os.platform == 'linux') {
+var iface = os.networkInterfaces();
+if (os.platform == 'Linux') {
   var host = iface['eth0'][0]['address'];
-} else if (os.platform == 'win32') {
+} else if (os.platform = 'Win32') {
   var host = iface['Ethernet'][1]['address'];
 }
+
 // Variables
-var iface = os.networkInterfaces();
+
 var hport = Math.round((Math.random() * 1000) + 1);
 // hport will be the host listening port for challenges only.
 setPort = 9095;
