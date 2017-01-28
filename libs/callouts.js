@@ -17,7 +17,7 @@ sock.setMaxListeners(0);
 var iface = os.networkInterfaces();
 if (os.platform() == 'linux') {
   var host = iface['eth0'][0]['address'];
-} else if (os.platform() = 'win32') {
+} else if (os.platform() == 'win32') {
   var host = iface['Ethernet'][1]['address'];
 }
 
@@ -34,14 +34,17 @@ nodes = [];
 // Functions
 function searchHost(searchPort) {
   var i = 0;
+  var searchMe = '0.0.0.0:9095';
   while (i <= 256) {
       (function(searchPort) {
       sock.setTimeout(2000, function() {
           process.stdout.write("trying: " + fromHost + i + ":" + searchPort + "\r");
+
         sock.destroy();
       });
-      sock.connect(searchPort, (fromHost + i), function() {
-        nodes.push('> ' + fromHost + i + ":" + searchPort);
+      searchMe = fromHost + i;
+      sock.connect(searchPort, searchMe, function() {
+        nodes.push(fromHost + i + ":" + searchPort);
         console.log('FOUND: ' + searchPort);
       });
       sock.on('data', function(data) {
@@ -51,6 +54,7 @@ function searchHost(searchPort) {
       sock.on('error', function(e) {
         sock.destroy();
       });
+      console.log('> ' + fromHost + i + ":" + searchPort);
     })(searchPort);
       i++;
   }
@@ -79,6 +83,6 @@ function amIMaster(nodes, searchPort) {
     //searchHost(Math.round(Math.random() * 1000) * 9);
 searchHost(setPort);
 
-if (nodes.length >= 1) {
-  amIMaster(nodes, searchPort);
+if (nodes.length <= 0) {
+  amIMaster(nodes, setPort);
 }
