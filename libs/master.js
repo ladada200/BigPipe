@@ -1,16 +1,19 @@
 var os = require('os');
+const net = require('net');
 var iface = os.networkInterfaces();
-
+socket = new net.Socket();
+socket.setMaxListeners(0);
 // This file is called ONLY if no master is present.
 console.log('I am the master node.');
-const net = require('net');
+
 // setPort from earlier is used to define listening port.
 const server = net.createServer((socket) => {
   console.log('Master is listening');
   socket.on('end', () => {
     console.log('node disconnected');
   });
-  socket.pipe('>' + Math.round((Math.random() * 100) + 1));
+  socket.write('>' + Math.round((Math.random() * 100) + 1));
+  socket.pipe(socket);
 });
 server.on('error', (err) => {
   throw err;
