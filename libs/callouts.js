@@ -39,22 +39,20 @@ function searchHost(searchPort) {
       (function(searchPort) {
       sock.setTimeout(2000, function() {
           process.stdout.write("trying: " + fromHost + i + ":" + searchPort + "\r");
-
         sock.destroy();
       });
       searchMe = fromHost + i;
       sock.connect(searchPort, searchMe, function() {
-        nodes.push(fromHost + i + ":" + searchPort);
-        console.log('FOUND: ' + searchPort);
       });
       sock.on('data', function(data) {
+        nodes.push(fromHost + i + ":" + searchPort);
         console.log((fromHost + i) + ":" + searchPort + ": " + data);
         sock.destroy();
       });
       sock.on('error', function(e) {
         sock.destroy();
       });
-      console.log('> ' + fromHost + i + ":" + searchPort);
+      //console.log('> ' + fromHost + i + ":" + searchPort);
     })(searchPort);
       i++;
   }
@@ -68,9 +66,11 @@ function searchHost(searchPort) {
 console.log('Scanning for Master...');
 
 function amIMaster(nodes, searchPort) {
-  nodes.forEach(function() {
-    sock.connect(searchPort, nodes[i], function() {
-    });
+  nodes.forEach((key) => {
+    net.createConnection(searchPort, key, function() {
+      nodes.push(searchPort);
+      console.log('FOUND: ' + searchPort);
+    })
     sock.on('data', function(data) {
       console.log(data);
       sock.destroy();

@@ -1,21 +1,19 @@
 var os = require('os');
 const net = require('net');
 var iface = os.networkInterfaces();
-socket = new net.Socket();
-socket.setMaxListeners(0);
 // This file is called ONLY if no master is present.
 console.log('I am the master node.');
 
 // setPort from earlier is used to define listening port.
-const server = net.createServer((socket) => {
+const server = net.createServer({ allowHalfOpen: false }, function(socket) {
   console.log('Master is listening');
-  socket.on('end', () => {
+  socket.on('end', function() {
     console.log('node disconnected');
   });
   socket.write('>' + Math.round((Math.random() * 100) + 1));
   socket.pipe(socket);
 });
-server.on('error', (err) => {
+server.on('error', function(err) {
   throw err;
 });
 if (os.platform() == 'linux') {
@@ -25,7 +23,7 @@ if (os.platform() == 'linux') {
 }
 var masTime = new Date();
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "May", "Aug", "Sept", "Oct", "Nov", "Dec"];
-server.listen(setPort, () => {
+server.listen(setPort, function() {
     console.log('Chained as master');
     console.log(host + ':' + setPort);
 });
