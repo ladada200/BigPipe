@@ -5,17 +5,20 @@ var iface = os.networkInterfaces();
 console.log('I am the master node.');
 
 // setPort from earlier is used to define listening port.
-const server = net.createServer({ allowHalfOpen: false }, function(socket) {
-  console.log('Master is listening');
+const server = net.createServer({ allowHalfOpen: true }, function(socket) {
+  console.log('got connection from node');
   socket.on('end', function() {
     console.log('node disconnected');
   });
-  socket.write('>' + Math.round((Math.random() * 100) + 1));
+  socket.write('> ' + host + ":"+ Math.round((Math.random() * 100000) + 9096) + '\n');
+  socket.write('> SENT PACKET');
   socket.pipe(socket);
 });
+
 server.on('error', function(err) {
   throw err;
 });
+
 if (os.platform() == 'linux') {
   var host = iface['eth0'][0]['address'];
 } else if (os.platform() == 'win32') {

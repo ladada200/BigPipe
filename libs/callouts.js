@@ -35,22 +35,24 @@ nodes = [];
 function searchHost(searchPort) {
   var i = 0;
   var searchMe = '0.0.0.0:9095';
-  while (i <= 256) {
+  while (i < 256) {
       (function(searchPort) {
-      sock.setTimeout(2000, function() {
-          process.stdout.write("trying: " + fromHost + i + ":" + searchPort + "\r");
-        sock.destroy();
+        searchMe = fromHost + i;
+        console.log('trying: ' + searchMe + ':' + searchPort);
+      const client = net.createConnection(searchPort, searchMe + i, function() {
+        console.log('FOUND ' + searchMe);
       });
-      searchMe = fromHost + i;
-      sock.connect(searchPort, searchMe, function() {
+      client.on('data', function(data) {
+        //nodes.push(data.toString());
+        client.end();
       });
-      sock.on('data', function(data) {
-        nodes.push(fromHost + i + ":" + searchPort);
-        console.log((fromHost + i) + ":" + searchPort + ": " + data);
-        sock.destroy();
+      client.on('end', function() {
+        // console.log('Dropped circuit');
       });
-      sock.on('error', function(e) {
-        sock.destroy();
+      client.on('error', function(err) {
+        if (err['code'] == 'ECONNRESET') {
+          console.log('connection was reset by host.');
+        }
       });
       //console.log('> ' + fromHost + i + ":" + searchPort);
     })(searchPort);
@@ -64,9 +66,9 @@ function searchHost(searchPort) {
   }
 }
 console.log('Scanning for Master...');
-
+/*
 function amIMaster(nodes, searchPort) {
-  nodes.forEach((key) => {
+  nodes.forEach(function(key) {
     net.createConnection(searchPort, key, function() {
       nodes.push(searchPort);
       console.log('FOUND: ' + searchPort);
@@ -80,9 +82,10 @@ function amIMaster(nodes, searchPort) {
     });
   });
 }
+*/
     //searchHost(Math.round(Math.random() * 1000) * 9);
 searchHost(setPort);
 
 if (nodes.length <= 0) {
-  amIMaster(nodes, setPort);
+  //amIMaster(nodes, setPort);
 }
