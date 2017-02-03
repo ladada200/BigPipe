@@ -29,43 +29,46 @@ setPort = 9095;
 // setPort is a user defined port for finding Master or clutser nodes.
 var searchIP = host.split(".");
 var fromHost = searchIP[0] + "." + searchIP[1] + "." + searchIP[2] + ".";
-nodes = [];
-
+var nodes = [];
+var itter = 0;
 // Functions
 function searchHost(searchPort) {
+  console.log('[!] scanning for master');
   var i = 0;
-  var searchMe = '0.0.0.0:9095';
+  nodes = [];
+  var searchMe = '0.0.0.0';
+
   while (i < 256) {
       (function(searchPort) {
-        searchMe = fromHost + i;
-        console.log('trying: ' + searchMe + ':' + searchPort);
-      const client = net.createConnection(searchPort, searchMe + i, function() {
-        console.log('FOUND ' + searchMe);
+        if (fromHost + i == host) {
+          searchMe = fromHost + (i + 1);
+        } else {
+          searchMe = fromHost + i;
+        }
+      const client = net.createConnection(searchPort, searchMe, function() {
+        //console.log('[!] ' + searchMe);
       });
       client.on('data', function(data) {
-        //nodes.push(data.toString());
-        client.end();
+        nodes.push(data.toString());
+        console.log('[!] Found Master!');
+        console.log('[>] ' + nodes[0]);
+        //console.log(nodes);
       });
       client.on('end', function() {
-        // console.log('Dropped circuit');
+        console.log('[!] Dropped circuit/ Master is offline.');
       });
       client.on('error', function(err) {
         if (err['code'] == 'ECONNRESET') {
-          console.log('connection was reset by host.');
+          console.log('[!] connection was reset by host.');
+        } else {
+
         }
       });
       //console.log('> ' + fromHost + i + ":" + searchPort);
     })(searchPort);
       i++;
   }
-  console.log(searchPort);
-  if (nodes.length <= 0) {
-    console.log('No hosts found');
-  } else {
-    console.log(nodes);
-  }
 }
-console.log('Scanning for Master...');
 /*
 function amIMaster(nodes, searchPort) {
   nodes.forEach(function(key) {
@@ -84,8 +87,13 @@ function amIMaster(nodes, searchPort) {
 }
 */
     //searchHost(Math.round(Math.random() * 1000) * 9);
-searchHost(setPort);
 
-if (nodes.length <= 0) {
-  //amIMaster(nodes, setPort);
-}
+searchHost(setPort);
+setTimeout(function() {
+  if (nodes.length > 0) {
+    console.log(nodes);
+  } else {
+    console.log('[-] Preparing for next stages.');
+    require('./master.js');
+  }
+}, 5000);

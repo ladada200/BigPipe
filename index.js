@@ -48,17 +48,17 @@ function testArray(arraySet) {
         return "node core: " + data;
       }
     }
-    console.log(ismas(a) + " has been idle for " + Math.round(new Date(arraySet[a]['times']['idle']).getMinutes()) + " minutes");
+    console.log('[' + a + ']' + ismas(a) + " has been idle for " + Math.round(new Date(arraySet[a]['times']['idle']).getMinutes()) + " minutes");
     a = a + 1;
   });
 }
 
-console.log("hostname: " + hostname);
-console.log("ip address: " + ipAddress);
-console.log("mac address: " + macAddress);
-console.log("ID: " + fullID);
-console.log("Operating System: " + os.platform());
-console.log("CPU Speed: " + spcnvrtr(os.cpus()[0]['speed']) + "hz for " + numCPUs + " cores");
+console.log("[+] hostname: " + hostname);
+console.log("[+] ip address: " + ipAddress);
+console.log("[+] mac address: " + macAddress);
+console.log("[+] ID: " + fullID);
+console.log("[+] Operating System: " + os.platform());
+console.log("[+] CPU Speed: " + spcnvrtr(os.cpus()[0]['speed']) + "hz for " + numCPUs + " cores");
 testArray(os.cpus());
 
 /*
@@ -68,8 +68,5 @@ setInterval(function() {
 }, 1000);
 */
 require('./libs/callouts.js');
-console.log(new Date().getTime());
-  if (nodes.length <= 0) {
-    console.log('Preparing for next stages.');
-    require('./libs/master.js');
-  }
+
+//console.log(new Date().getTime());
