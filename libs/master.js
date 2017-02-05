@@ -24,15 +24,16 @@ const server = net.createServer({pauseOnConnect: false}, function(socket) {
       console.log('[!] connection reset by node');
     }
   });
-  var randPort = Math.round((Math.random() * 1000) + 9096);
+  const randPort = Math.round((Math.random() * 1000) + 9096);
 
   socket.resume();
-  socket.write(forKey[3] + ":"+ randPort);
+  socket.write(`${randPort}`);
   socket.pipe(socket);
+  socket.destroy();
   socket.connect({port: randPort, host: forKey[3]}, function() {
     console.log("Sending challenge to: " + forKey[3]);
+    
   });
-  socket.write("A + B = ?");
 });
 
 server.on('error', function(err) {
