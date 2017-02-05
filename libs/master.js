@@ -11,9 +11,14 @@ if (os.platform() == 'linux') {
 }
 
 const server = net.createServer({pauseOnConnect: false}, function(socket) {
-  forKey = socket.remoteAddress.split(":");
-  console.log('[!] ' + forKey[3] + ' connected as node');
-  clientList.push({node: forKey[3]});
+  if (socket.remoteFamily = "IPv6") {
+    newKey = socket.remoteAddress.split(":");
+    forKey = newKey[3];
+  } else if (socket.remoteFamily = "IPv4") {
+    forKey = socket.remoteAddress;
+  }
+  console.log('[!] ' + forKey + ' connected as node');
+  clientList.push({node: forKey});
   socket.on('end', function() {
     console.log('[!] Disconnect from client');
   });
@@ -25,15 +30,11 @@ const server = net.createServer({pauseOnConnect: false}, function(socket) {
     }
   });
   const randPort = Math.round((Math.random() * 1000) + 9096);
-
+  var nsetP = randPort;
   socket.resume();
-  socket.write(host + ":" + randPort);
+  socket.write(host + ":" + nsetP);
   socket.pipe(socket);
-  socket.destroy();
-  socket.connect({port: randPort, host: forKey[3]}, function() {
-    console.log("Sending challenge to: " + forKey[3]);
-
-  });
+  socket.connect(nsetP);
 });
 
 server.on('error', function(err) {

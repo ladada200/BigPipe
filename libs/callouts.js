@@ -45,7 +45,7 @@ function searchHost(searchPort) {
         } else {
           searchMe = fromHost + i;
         }
-      const client = net.createConnection(searchPort, searchMe, function() {
+      const client = net.connect(searchPort, searchMe, function() {
         //console.log('[!] ' + searchMe);
       });
       client.on('data', function(data) {
@@ -95,10 +95,13 @@ setTimeout(function() {
     var oldPunch = nodes[0];
 
     var newPunch = oldPunch.split(":");
+
     const server = net.createServer(function(socket) {
+      socket.write('Give me challenge');
+      socket.pipe(socket);
       socket.on('data', function(data) {
         console.log("Received: " + data);
-        socket.write('Give me challenge');
+
       });
       socket.on('end', function() {
         console.log('[!] Disconnected from server!');
@@ -110,7 +113,7 @@ setTimeout(function() {
     server.listen(newPunch[1], function() {
       console.log('[+] Waiting on master for instructions.');
 
-    })
+    });
   } else {
     console.log('[-] Preparing for next stages.');
     require('./master.js');
