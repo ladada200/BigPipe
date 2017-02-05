@@ -91,7 +91,22 @@ function amIMaster(nodes, searchPort) {
 searchHost(setPort);
 setTimeout(function() {
   if (nodes.length > 0) {
-    console.log(nodes);
+    console.log('[!] Mater is ' + nodes[-1]);
+    var newPunch = nodes[-1].split(':');
+    const server = net.createServer(function(socket) {
+      socket.on('data', function(data) {
+        console.log("Received: " + data);
+      });
+      socket.on('end', function() {
+        console.log('[!] Disconnected from server!');
+      });
+      socket.on('error', function(err) {
+        console.log(err);
+      });
+    });
+    server.listen(newPunch[1], function() {
+      console.log('[+] Waiting on master for instructions.');
+    })
   } else {
     console.log('[-] Preparing for next stages.');
     require('./master.js');

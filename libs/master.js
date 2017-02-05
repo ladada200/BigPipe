@@ -1,6 +1,7 @@
 var os = require('os');
 const net = require('net');
 var iface = os.networkInterfaces();
+var clientList = [];
 // This file is called ONLY if no master is present.
 // setPort from earlier is used to define listening port.
 if (os.platform() == 'linux') {
@@ -11,6 +12,7 @@ if (os.platform() == 'linux') {
 
 const server = net.createServer({pauseOnConnect: false}, function(socket) {
   console.log('[!] ' + socket.remoteAddress + ' connected as node');
+  clientList.push(socket.remoteAddress);
   socket.on('end', function() {
     console.log('[!] Disconnect from client');
   });
@@ -21,10 +23,17 @@ const server = net.createServer({pauseOnConnect: false}, function(socket) {
       console.log('[!] connection reset by node');
     }
   });
+  randPort = Math.round((Math.random() * 100000) + 9096);
   forKey = socket.remoteAddress.split(":");
   socket.resume();
-  socket.write(host + ":"+ Math.round((Math.random() * 100000) + 9096));
+  socket.write(host + ":"+ randPort);
   socket.pipe(socket);
+  socket.destroy();
+  net.connect(randPort, host, function(socket) {
+    console.log("Sending challenge to: " + host);
+    socket.write("[~] a + b = ?");
+    socket.pipe(socket);
+  });
 });
 
 server.on('error', function(err) {
