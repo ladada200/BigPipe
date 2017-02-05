@@ -11,8 +11,9 @@ if (os.platform() == 'linux') {
 }
 
 const server = net.createServer({pauseOnConnect: false}, function(socket) {
-  console.log('[!] ' + socket.remoteAddress + ' connected as node');
-  clientList.push(socket.remoteAddress);
+  forKey = socket.remoteAddress.split(":");
+  console.log('[!] ' + forKey[3] + ' connected as node');
+  clientList.push({node: forKey[3]});
   socket.on('end', function() {
     console.log('[!] Disconnect from client');
   });
@@ -23,17 +24,15 @@ const server = net.createServer({pauseOnConnect: false}, function(socket) {
       console.log('[!] connection reset by node');
     }
   });
-  randPort = Math.round((Math.random() * 100000) + 9096);
-  forKey = socket.remoteAddress.split(":");
+  var randPort = Math.round((Math.random() * 1000) + 9096);
+
   socket.resume();
-  socket.write(host + ":"+ randPort);
+  socket.write(forKey[3] + ":"+ randPort);
   socket.pipe(socket);
-  socket.destroy();
-  net.connect(randPort, host, function(socket) {
-    console.log("Sending challenge to: " + host);
-    socket.write("[~] a + b = ?");
-    socket.pipe(socket);
+  socket.connect({port: randPort, host: forKey[3]}, function() {
+    console.log("Sending challenge to: " + forKey[3]);
   });
+  socket.write("A + B = ?");
 });
 
 server.on('error', function(err) {

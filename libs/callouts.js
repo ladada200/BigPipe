@@ -91,8 +91,10 @@ function amIMaster(nodes, searchPort) {
 searchHost(setPort);
 setTimeout(function() {
   if (nodes.length > 0) {
-    console.log('[!] Mater is ' + nodes[-1]);
-    var newPunch = nodes[-1].split(':');
+    console.log('[!] Mater is ' + nodes[0]);
+    var oldPunch = nodes[0];
+
+    var newPunch = oldPunch.split(":");
     const server = net.createServer(function(socket) {
       socket.on('data', function(data) {
         console.log("Received: " + data);

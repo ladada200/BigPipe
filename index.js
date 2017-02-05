@@ -48,7 +48,7 @@ function testArray(arraySet) {
         return "node core: " + data;
       }
     }
-    console.log('[' + a + ']' + ismas(a) + " has been idle for " + Math.round(new Date(arraySet[a]['times']['idle']).getMinutes()) + " minutes");
+    console.log('[' + a + '] ' + ismas(a) + " has been idle for " + Math.round(new Date(arraySet[a]['times']['idle']).getMinutes()) + " minutes");
     a = a + 1;
   });
 }
