@@ -27,12 +27,12 @@ const server = net.createServer({pauseOnConnect: false}, function(socket) {
   const randPort = Math.round((Math.random() * 1000) + 9096);
 
   socket.resume();
-  socket.write(`${randPort}`);
+  socket.write(host + ":" + randPort);
   socket.pipe(socket);
   socket.destroy();
   socket.connect({port: randPort, host: forKey[3]}, function() {
     console.log("Sending challenge to: " + forKey[3]);
-    
+
   });
 });
 
