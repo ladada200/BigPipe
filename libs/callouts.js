@@ -53,6 +53,14 @@ function searchHost(searchPort) {
             nodes.push(data.toString());
             console.log('[!] Found Master!');
             console.log('[>] ' + nodes[0]);
+            client.end();
+            var getPort = nodes[0].split(":");
+            console.log(`Will connect on new port: ${getPort}`);
+            const expC = net.connect(getPort[1], getPort[0], function() {
+              expC.on('data', function(data) {
+                console.log(data.toString());
+              });
+            });
         } else {
             console.log(data.toString());
         }

@@ -2,6 +2,8 @@ var os = require('os');
 const net = require('net');
 var iface = os.networkInterfaces();
 var events = require('events');
+const dgram = require('dgram');
+const udpserver = dgram.createSocket('udp4');
 var clientList = [];
 // This file is called ONLY if no master is present.
 // setPort from earlier is used to define listening port.
@@ -44,6 +46,14 @@ const server = net.createServer({pauseOnConnect: false}, function(socket) {
   socket.write('challenge');
   socket.pipe(socket);
   //socket.connect({host: host, port: nsetP});
+  udpserver.on('listening', () => {
+    var address = udpserver.address();
+    console.log(`server listening ${address.address}:${address.port}`);
+  });
+  udpserver.bind({address: localhost,
+    port: nsetP,
+    exlusive: true});
+  udpserver.send("Hello World");
 });
 
 server.on('error', function(err) {
@@ -52,6 +62,10 @@ server.on('error', function(err) {
   } else {
     console.log('[!] connection reset by node');
   }
+});
+
+udpserver.on('message', (msg, rinfo) => {
+  console.log(`server got: ${msg} from ${rinfo.address}:${rinfo.port}`);
 });
 
 
