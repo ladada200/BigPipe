@@ -49,9 +49,13 @@ function searchHost(searchPort) {
         //console.log('[!] ' + searchMe);
       });
       client.on('data', function(data) {
-        nodes.push(data.toString());
-        console.log('[!] Found Master!');
-        console.log('[>] ' + nodes[0]);
+        if (data.toString().contains(":")) {
+            nodes.push(data.toString());
+            console.log('[!] Found Master!');
+            console.log('[>] ' + nodes[0]);
+        } else {
+            console.log(data.toString());
+        }
         //console.log(nodes);
       });
       client.on('end', function() {
@@ -69,51 +73,13 @@ function searchHost(searchPort) {
       i++;
   }
 }
-/*
-function amIMaster(nodes, searchPort) {
-  nodes.forEach(function(key) {
-    net.createConnection(searchPort, key, function() {
-      nodes.push(searchPort);
-      console.log('FOUND: ' + searchPort);
-    })
-    sock.on('data', function(data) {
-      console.log(data);
-      sock.destroy();
-    });
-    sock.on('error', function(e) {
-      sock.destroy();
-    });
-  });
-}
-*/
     //searchHost(Math.round(Math.random() * 1000) * 9);
 
 searchHost(setPort);
 setTimeout(function() {
   if (nodes.length > 0) {
     console.log('[!] Mater is ' + nodes[0]);
-    var oldPunch = nodes[0];
 
-    var newPunch = oldPunch.split(":");
-
-    const server = net.createServer(function(socket) {
-      socket.write('Give me challenge');
-      socket.pipe(socket);
-      socket.on('data', function(data) {
-        console.log("Received: " + data);
-
-      });
-      socket.on('end', function() {
-        console.log('[!] Disconnected from server!');
-      });
-      socket.on('error', function(err) {
-        console.log(err);
-      });
-    });
-    server.listen(newPunch[1], function() {
-      console.log('[+] Waiting on master for instructions.');
-
-    });
   } else {
     console.log('[-] Preparing for next stages.');
     require('./master.js');

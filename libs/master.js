@@ -1,6 +1,7 @@
 var os = require('os');
 const net = require('net');
 var iface = os.networkInterfaces();
+var events = require('events');
 var clientList = [];
 // This file is called ONLY if no master is present.
 // setPort from earlier is used to define listening port.
@@ -10,14 +11,20 @@ if (os.platform() == 'linux') {
   var host = iface['Ethernet'][1]['address'];
 }
 
+var eventEmitter = new events.EventEmitter();
+
 const server = net.createServer({pauseOnConnect: false}, function(socket) {
-  if (socket.remoteFamily = "IPv6") {
+  socket.once('data', function(data) {
+    console.log(data.toString());
+  });
+  if (socket.remoteFamily != "IPv4") {
     newKey = socket.remoteAddress.split(":");
     forKey = newKey[3];
-  } else if (socket.remoteFamily = "IPv4") {
+  } else {
     forKey = socket.remoteAddress;
   }
-  console.log('[!] ' + forKey + ' connected as node');
+      console.log('[+] ' + forKey + ' connected as node');
+
   clientList.push({node: forKey});
   socket.on('end', function() {
     console.log('[!] Disconnect from client');
@@ -34,7 +41,9 @@ const server = net.createServer({pauseOnConnect: false}, function(socket) {
   socket.resume();
   socket.write(host + ":" + nsetP);
   socket.pipe(socket);
-  socket.connect(nsetP);
+  socket.write('challenge');
+  socket.pipe(socket);
+  //socket.connect({host: host, port: nsetP});
 });
 
 server.on('error', function(err) {
@@ -52,5 +61,6 @@ var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "May", "Aug", "Se
 server.listen(setPort, function() {
     console.log('[+] Chained as master');
     console.log('[+] Our IP is ' + host + ':' + setPort);
+
 });
 console.log("[~] started on: " + months[masTime.getMonth()] + " " + masTime.getDate() + " " + masTime.getFullYear() + " at " + masTime.getHours() + ":" + masTime.getMinutes());
