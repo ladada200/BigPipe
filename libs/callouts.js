@@ -49,7 +49,7 @@ function searchHost(searchPort) {
         //console.log('[!] ' + searchMe);
       });
       client.on('data', function(data) {
-        if (data.toString().contains(":")) {
+        if (data.toString().indexOf(":") > -1) {
             nodes.push(data.toString());
             console.log('[!] Found Master!');
             console.log('[>] ' + nodes[0]);

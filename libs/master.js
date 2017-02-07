@@ -46,14 +46,16 @@ const server = net.createServer({pauseOnConnect: false}, function(socket) {
   socket.write('challenge');
   socket.pipe(socket);
   //socket.connect({host: host, port: nsetP});
-  udpserver.on('listening', () => {
-    var address = udpserver.address();
-    console.log(`server listening ${address.address}:${address.port}`);
-  });
-  udpserver.bind({address: localhost,
-    port: nsetP,
-    exlusive: true});
-  udpserver.send("Hello World");
+  setTimeout(function() {
+    udpserver.on('listening', () => {
+      var address = udpserver.address();
+      console.log(`server listening ${address.address}:${address.port}`);
+    });
+    udpserver.bind({address: 'localhost',
+      port: nsetP,
+      exlusive: true});
+    udpserver.send("Hello World");
+  }, 5000);
 });
 
 server.on('error', function(err) {
