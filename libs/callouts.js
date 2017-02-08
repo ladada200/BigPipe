@@ -11,6 +11,7 @@
 //Prereq
 var os = require('os');
 var net = require('net');
+
 sock = new net.Socket();
 sock.setMaxListeners(0);
 // Initiate callouts;
@@ -46,7 +47,7 @@ function searchHost(searchPort) {
           searchMe = fromHost + i;
         }
       const client = net.connect(searchPort, searchMe, function() {
-        //console.log('[!] ' + searchMe);
+        console.log('[!] ' + searchMe);
       });
       client.on('data', function(data) {
         if (data.toString().indexOf(":") > -1) {
@@ -55,9 +56,9 @@ function searchHost(searchPort) {
             console.log('[>] ' + nodes[0]);
             client.end();
             var getPort = nodes[0].split(":");
-            console.log(`Will connect on new port: ${getPort}`);
+            console.log(`[~] Will connect on new port: ${getPort[1]}`);
             const expC = net.connect(getPort[1], getPort[0], function() {
-              expC.on('data', function(data) {
+              expC.on('pipe', function(data) {
                 console.log(data.toString());
               });
             });
@@ -70,10 +71,19 @@ function searchHost(searchPort) {
         console.log('[!] Dropped circuit/ Master is offline.');
       });
       client.on('error', function(err) {
-        if (err['code'] == 'ECONNRESET') {
-          console.log('[!] connection was reset by host.');
-        } else {
-
+        switch(err['code']) {
+          case 'ECONNRESET':
+            console.log('[!] connection reset by host.');
+            break;
+          case 'ECONNREFUSED':
+            console.log('[!] connection refused by: '+ searchMe);
+            break;
+          case 'EADDRNOTAVAIL':
+            console.log('[!] Address ' + searchMe + ' not reachable.');
+            break;
+          default:
+            console.log(err.toString());
+            break;
         }
       });
       //console.log('> ' + fromHost + i + ":" + searchPort);

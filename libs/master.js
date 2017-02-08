@@ -40,10 +40,9 @@ const server = net.createServer({pauseOnConnect: false}, function(socket) {
   });
   const randPort = Math.round((Math.random() * 1000) + 9096);
   var nsetP = randPort;
+  global.nsetP = nsetP;
   socket.resume();
   socket.write(host + ":" + nsetP);
-  socket.pipe(socket);
-  socket.write('challenge');
   socket.pipe(socket);
   //socket.connect({host: host, port: nsetP});
   setTimeout(function() {
@@ -51,10 +50,11 @@ const server = net.createServer({pauseOnConnect: false}, function(socket) {
       var address = udpserver.address();
       console.log(`server listening ${address.address}:${address.port}`);
     });
-    udpserver.bind({address: 'localhost',
-      port: nsetP,
-      exlusive: true});
-    udpserver.send("Hello World");
+    var bindmessage = "Hello World";
+    udpserver.send(bindmessage, global.nsetP, forKey, function() {
+      console.log(`Sent: ${bindmessage} to ${forKey}`);
+    });
+
   }, 5000);
 });
 
