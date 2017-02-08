@@ -72,6 +72,8 @@ function searchHost(searchPort) {
       });
       client.on('error', function(err) {
         switch(err['code']) {
+          case 'EHOSTUNREACH':
+            break;
           case 'ECONNRESET':
             console.log('[!] connection reset by host.');
             break;
