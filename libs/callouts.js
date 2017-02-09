@@ -54,24 +54,28 @@ function searchHost(searchPort) {
             nodes.push(data.toString());
             console.log('[!] Found Master!');
             console.log('[>] ' + nodes[0]);
-            client.end();
+
             var getPort = nodes[0].split(":");
             console.log(`[~] Will connect on new port: ${getPort[1]}`);
-            const expC = net.connect(getPort[1], getPort[0], function() {
-              expC.on('pipe', function(data) {
-                console.log(data.toString());
-              });
-            });
         } else {
             console.log(data.toString());
         }
         //console.log(nodes);
+      });
+      client.on('pipe', function(data) {
+        console.log('[~] ' + data.toString());
       });
       client.on('end', function() {
         console.log('[!] Dropped circuit/ Master is offline.');
       });
       client.on('error', function(err) {
         switch(err['code']) {
+          case 'ETIMEDOUT':
+            console.log('[!] ' + searchMe + ' timed out.');
+            break;
+          case 'ENETUNREACH':
+            console.log('[!] ' + searchMe + ' could not be reached');
+            break;
           case 'EHOSTUNREACH':
             break;
           case 'ECONNRESET':
